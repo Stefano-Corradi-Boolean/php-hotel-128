@@ -41,22 +41,26 @@
 
     ];
 
+    // se di defaulto non viene inviata la chiave 'vote' $vote sarà = 0
+    $vote = isset($_GET['vote']) ? $_GET['vote'] : 0;
+
     // inizializzo l'array che serve per stampare in pagina i dati
     $filtered_hotels = [];
 
-    var_dump($_GET);
-    //die();
-    // se il form invia 'parking' eseguo il filtro
-    if(isset($_GET['parking'])){
+    // effettuo prima il filtro solo in base al voto
+    if(!isset($_GET['parking'])){
       foreach($hotels as $hotel){
-        // se è true il valore di parking pusho l'hotel nell'array da stampare
-        if($hotel['parking']){
+        if( $hotel['vote'] >= $vote){
           $filtered_hotels[] = $hotel;
         }
       }
     }else{
-      // se non è stato inviato 'parking' l'lenco da stampare sarà uguale all'elenco con tutti i dati
-      $filtered_hotels = $hotels;
+      // se parking è stato inviato filtro anche per parking
+      foreach($hotels as $hotel){
+        if($hotel['parking'] && $hotel['vote'] >= $vote){
+          $filtered_hotels[] = $hotel;
+        }
+      }
     }
 
 
